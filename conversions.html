@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+                :root{
+                        --gap: .5rem;
+                        --bg: #0f172a;
+                        --card: #fff;
+                        --muted: #64748b;
+                }
+                html,body{height:100%;margin:0}
+                body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; background:var(--bg); color:var(--muted); -webkit-font-smoothing:antialiased}
+                main{position:relative;height:100vh;overflow:hidden}
+
+                /* each section acts like its own full-page "card" */
+                main > section{
+                        position:absolute;
+                        inset:0;
+                        padding:2.5rem;
+                        display:flex;
+                        flex-direction:column;
+                        gap:var(--gap);
+                        align-items:center;
+                        justify-content:center;
+                        background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+                        border-left:1px solid rgba(255,255,255,0.03);
+                        border-right:1px solid rgba(255,255,255,0.02);
+                        box-sizing:border-box;
+                        opacity:0;
+                        transform:translateY(6vh) scale(.99);
+                        transition:opacity .45s ease, transform .45s ease;
+                        pointer-events:none;
+                }
+
+                /* visible page */
+                main > section.active{
+                        opacity:1;
+                        transform:none;
+                        pointer-events:auto;
+                }
+
+                /* style for controls inside each page */
+                main > section .controls{
+                        display:flex;
+                        gap:.5rem;
+                        flex-wrap:wrap;
+                        justify-content:center;
+                }
+                button{
+                        background:var(--card);
+                        color:#111827;
+                        border:0;
+                        padding: 2rem 1rem;
+                        margin: 5px;
+                        border-radius:8px;
+                        box-shadow:0 1px 0 rgba(0,0,0,.05);
+                        cursor:pointer;
+                        font-weight:600;
+                }
+
+                        main > section#page-1.active .buttons button:nth-child(1),
+                        main > section#page-2.active .buttons button:nth-child(2),
+                        main > section#page-3.active .buttons button:nth-child(3),
+                        main > section#page-4.active .buttons button:nth-child(4) {
+                                transform: translateY(-8px);
+                                background: linear-gradient(180deg,#006b7e,#003130);
+                                color: #fff;
+                                box-shadow: 0 8px 30px rgba(2,6,23,0.25);
+                                border: 1px solid rgba(0,0,0,0.06);
+                        }
+
+
+
+
+                h1{
+                        margin-top:1rem;
+                        color:var(--card);
+                        font-size:clamp(1.25rem,3.5vw,2rem);
+                        letter-spacing:.4px;
+                }
+
+                /* small page indicator in corner */
+                .page-indicator{
+                        position:absolute;
+                        left:1rem;
+                        top:1rem;
+                        color:rgba(255,255,255,.6);
+                        font-size:.85rem;
+                        padding:.25rem .5rem;
+                        background:rgba(255,255,255,.02);
+                        border-radius:6px;
+                        pointer-events:none;
+                }
+
+                /* responsive tweaks */
+                @media (min-width:900px){
+                        main > section{padding:3.5rem}
+                        .controls{gap:1rem}
+                }
+
+
+
+
+                /* ppm ⬅️➡️ pH  :*/
+
+  .calculator {
+    background-color: #44f2e6;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    max-width: 400px;
+    width: 100%;
+  }
+
+  .input-group {
+    margin: 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-radius: 8px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .bold {
+    font-weight: 900;
+  }
+
+  input {
+    width: 45%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+
+  input.invalid {
+    background-color: #f56c77;
+    border-color: #580009;
+  }
+
+  .buttons {
+        display: flex;
+
+
+  }
+
+  .note {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #666;
+  }
+
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  .calculator {
+    background-color: #44f2e6;
+    padding: 25px 30px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    max-width: 400px;
+    width: 100%;
+  }
+
+  .input-group {
+    margin: 15px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-radius: 8px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .bold {
+    font-weight: 900;
+  }
+
+  input {
+    width: 40%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+
+  input.invalid {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+  }
+
+  .note {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #666;
+  }
+        </style>
+
+
+
+
+        </style>
+        <title>Conversions</title>
+</head>
+<body>
+
+        <main>
+
+                <section>
+                        <div class="buttons">
+
+                                <button>ppm ⬅️➡️ pH</button>
+                                <button>RmV ⬅️➡️ pH</button>
+                                <button>ppm ⬅️➡️ mV</button>
+                                <button>RmV ⬅️➡️ mV</button>
+                        </div>
+                        <h1>ppm ⬅️➡️ pH</h1>
+
+
+
+                         <div class="calculator">
+    <div class="input-group">
+      <label for="ppm"><span class="bold"> ppm </span>[1 - 20]</label>
+      <input type="number" id="ppm" placeholder="1 - 20">
+    </div>
+
+    <div class="input-group">
+      <label for="rmv"><span class="bold"> RmV </span>[0 - 76.96]</label>
+      <input type="number" id="rmv" placeholder="0 - 76.96">
+    </div>
+
+    <div class="input-group">
+      <label for="ph"><span class="bold"> pH </span>[3.00 - 4.30]</label>
+      <input type="number" step="0.01" id="ph" placeholder="3.00 - 4.30">
+    </div>
+  </div>
+                </section>
+
+
+                <section><div class="buttons">
+                         <button>ppm ⬅️➡️ pH</button>
+                        <button>RmV ⬅️➡️ pH</button>
+                        <button>ppm ⬅️➡️ mV</button>
+                        <button>RmV ⬅️➡️ mV</button></div>
+                        <h1>RmV ⬅️➡️ pH</h1>
+                         <div class="calculator">
+    <div class="input-group">
+      <label for="rmv"><span class="bold"> RmV </span>[-100 – -40]</label>
+      <input type="number" id="rmv" placeholder="-100 to -40">
+    </div>
+
+    <div class="input-group">
+      <label for="ph"><span class="bold"> pH </span>[4.52 – 5.54]</label>
+      <input type="number" step="0.01" id="ph" placeholder="4.52 - 5.54">
+    </div>
+  </div>
+                </section>
+
+
+                <section><div class="buttons">
+
+                        <button>ppm ⬅️➡️ pH</button>
+                        <button>RmV ⬅️➡️ pH</button>
+                        <button>ppm ⬅️➡️ mV</button>
+                        <button>RmV ⬅️➡️ mV</button>
+                </div>
+                        <h1>ppm ⬅️➡️ mV</h1>
+                         <div class="calculator">
+    <div class="input-group">
+      <label for="ppm"><span class="bold"> ppm </span>[1 - 20]</label>
+      <input type="number" id="ppm" placeholder="1 - 20">
+    </div>
+
+    <div class="input-group">
+      <label for="rmv"><span class="bold"> RmV </span>[0 - 76.96]</label>
+      <input type="number" id="rmv" placeholder="0 - 76.96">
+    </div>
+
+    <div class="input-group">
+      <label for="mv"><span class="bold"> mV </span>[159.7 - 236.6]</label>
+      <input type="number" id="mv" placeholder="159.7 - 236.6">
+    </div>
+
+  </div>
+                </section>
+
+
+                <section><div class="buttons">
+
+                        <button>ppm ⬅️➡️ pH</button>
+                        <button>RmV ⬅️➡️ pH</button>
+                        <button>ppm ⬅️➡️ mV</button>
+                        <button>RmV ⬅️➡️ mV</button>
+                </div>
+                        <h1>RmV ⬅️➡️ mV</h1>
+<div class="calculator">
+                        <div class="input-group">
+      <label for="rmv"><span class="bold">RmV</span> [-100 – -40]</label>
+      <input type="number" id="rmv" placeholder="-100 to -40">
+    </div>
+
+    <div class="input-group">
+      <label for="mv"><span class="bold">MV</span> [86.06 – 146.6]</label>
+      <input type="number" step="0.01" id="mv" placeholder="86.06 to 146.6">
+    </div>
+  </div>
+                </section>
+
+
+
+        </main>
+               <script>
+
+                // page transitions:
+        document.addEventListener('DOMContentLoaded', () => {
+                const sections = Array.from(document.querySelectorAll('main > section'));
+                if (!sections.length) return;
+
+                // assign ids to pages: page-1 .. page-N
+                sections.forEach((s, i) => s.id = 'page-' + (i + 1));
+
+                // show a given page index
+                function show(index) {
+                        index = Math.max(0, Math.min(sections.length - 1, index));
+                        sections.forEach((sec, i) => sec.classList.toggle('active', i === index));
+                        history.replaceState(null, '', '#' + sections[index].id);
+                }
+
+                // initial page from hash (or first)
+                const hash = location.hash.replace('#', '');
+                let startIndex = sections.findIndex(s => s.id === hash);
+                if (startIndex === -1) startIndex = 0;
+                show(startIndex);
+
+                // map buttons to pages:
+                // each section has 4 buttons in order; we map:
+                // button 0 -> page-1, button 1 -> page-2, ...
+                document.querySelectorAll('main > section').forEach((sec) => {
+                        const buttons = Array.from(sec.querySelectorAll('button'));
+                        buttons.forEach((btn, idx) => {
+                                btn.addEventListener('click', () => {
+                                        const targetIndex = idx; // first button -> page 0, etc.
+                                        show(targetIndex);
+                                });
+                        });
+                });
+
+                // keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                        const current = sections.findIndex(s => s.classList.contains('active'));
+                        if (e.key === 'ArrowRight' || e.key === 'PageDown') show(Math.min(sections.length - 1, current + 1));
+                        if (e.key === 'ArrowLeft' || e.key === 'PageUp') show(Math.max(0, current - 1));
+                });
+
+                // optionally create small page indicator for each section
+                sections.forEach((sec, i) => {
+                        const el = document.createElement('div');
+                        el.className = 'page-indicator';
+                        el.textContent = `Page ${i + 1} / ${sections.length}`;
+                        sec.appendChild(el);
+                });
+        });
+
+
+
+
+
+
+        // Refactored calculators: scoped per-section and using shared interpolation helpers
+        (function () {
+                // Shared helpers
+                function interpolate(x, xArr, yArr) {
+                        if (!xArr.length || !yArr.length) return null;
+                        // if outside bounds, clamp to end values
+                        const a0 = xArr[0], aN = xArr[xArr.length - 1];
+                        if ((a0 <= aN && x <= a0) || (a0 > aN && x >= a0)) return yArr[0];
+                        if ((a0 <= aN && x >= aN) || (a0 > aN && x <= aN)) return yArr[yArr.length - 1];
+
+                        for (let i = 0; i < xArr.length - 1; i++) {
+                                const x0 = xArr[i], x1 = xArr[i + 1];
+                                if ((x0 <= x && x <= x1) || (x0 >= x && x >= x1)) {
+                                        const t = (x - x0) / (x1 - x0);
+                                        return yArr[i] + t * (yArr[i + 1] - yArr[i]);
+                                }
+                        }
+                        return null;
+                }
+
+                // reverseInterpolate: find x for a given y, works if yArr monotonic (inc or dec)
+                function reverseInterpolate(y, xArr, yArr) {
+                        if (!xArr.length || !yArr.length) return null;
+                        const y0 = yArr[0], yN = yArr[yArr.length - 1];
+                        // clamp
+                        if ((y0 <= yN && y <= y0) || (y0 > yN && y >= y0)) return xArr[0];
+                        if ((y0 <= yN && y >= yN) || (y0 > yN && y <= yN)) return xArr[xArr.length - 1];
+
+                        for (let i = 0; i < yArr.length - 1; i++) {
+                                const yA = yArr[i], yB = yArr[i + 1];
+                                if ((yA <= y && y <= yB) || (yA >= y && y >= yB)) {
+                                        const t = (y - yA) / (yB - yA);
+                                        return xArr[i] + t * (xArr[i + 1] - xArr[i]);
+                                }
+                        }
+                        return null;
+                }
+
+                function validateInputEl(el, value, arr) {
+                        if (!el) return;
+                        if (value === null || isNaN(value)) {
+                                el.classList.add('invalid');
+                                return;
+                        }
+                        const min = Math.min(...arr);
+                        const max = Math.max(...arr);
+                        if (value < min || value > max) el.classList.add('invalid');
+                        else el.classList.remove('invalid');
+                }
+
+                // Data sets
+                const DATA = {
+                        // ppm <-> rmv <-> pH
+                        ppm_rmv_ph: {
+                                ppm: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
+                                rmv: [76.96,59.15,48.73,41.34,35.61,30.93,26.97,23.54,20.51,17.81,15.36,13.12,11.07,9.16,7.39,5.73,4.17,2.71,1.32,0],
+                                ph:  [3,3.3,3.48,3.6,3.7,3.78,3.85,3.9,3.95,4,4.04,4.08,4.11,4.15,4.18,4.2,4.23,4.26,4.28,4.3]
+                        },
+                        // rmv <-> pH (alternate range)
+                        rmv_ph: {
+                                rmv: [-100, -90, -85, -80, -75, -70, -65, -60, -55, -50, -40],
+                                ph:  [5.54, 5.37, 5.29, 5.20, 5.12, 5.03, 4.95, 4.86, 4.78, 4.69, 4.52]
+                        },
+                        // ppm <-> rmv <-> mV
+                        ppm_rmv_mv: {
+                                ppm: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
+                                rmv: [76.96,59.15,48.73,41.34,35.61,30.93,26.97,23.54,20.51,17.81,15.36,13.12,11.07,9.16,7.39,5.73,4.17,2.71,1.32,0],
+                                mv:  [236.6,218.8,208.4,201,195.3,190.6,186.6,183.2,180.2,177.5,175,175.8,170.7,168.8,167.1,165.4,163.8,162.4,161,159.7]
+                        },
+                        // rmv <-> mV
+                        rmv_mv: {
+                                rmv: [-100, -90, -85, -80, -75, -70, -65, -60, -55, -50, -40],
+                                mv:  [86.06, 96.6, 101.6, 106.6, 111.6, 116.6, 121.6, 126.6, 131.6, 136.6, 146.6]
+                        }
+                };
+
+                // For each page/section, wire the appropriate calculator by inspecting contained inputs
+                document.querySelectorAll('main > section').forEach((sec, index) => {
+                        // find inputs scoped to this section
+                        const ppmEl = sec.querySelector('#ppm');
+                        const rmvEl = sec.querySelector('#rmv');
+                        const phEl  = sec.querySelector('#ph');
+                        const mvEl  = sec.querySelector('#mv');
+
+                        // helper to set numeric value safely
+                        function setElValue(el, val, decimals = 2) {
+                                if (!el || val === null || val === undefined || isNaN(val)) return;
+                                el.value = Number(val).toFixed(decimals);
+                        }
+
+                        // Detect which dataset to use
+                        // Priority: if section has ppm & ph -> use ppm_rmv_ph dataset
+                        if (ppmEl && rmvEl && phEl) {
+                                const d = DATA.ppm_rmv_ph;
+                                // update functions
+                                function fromPPM() {
+                                        const v = parseFloat(ppmEl.value);
+                                        if (isNaN(v)) return;
+                                        const rmv = interpolate(v, d.ppm, d.rmv);
+                                        const ph  = interpolate(v, d.ppm, d.ph);
+                                        setElValue(rmvEl, rmv);
+                                        setElValue(phEl, ph, 2);
+                                        validateInputEl(ppmEl, v, d.ppm);
+                                        validateInputEl(rmvEl, rmv, d.rmv);
+                                        validateInputEl(phEl, ph, d.ph);
+                                }
+                                function fromRMV() {
+                                        const v = parseFloat(rmvEl.value);
+                                        if (isNaN(v)) return;
+                                        const ppm = reverseInterpolate(v, d.ppm, d.rmv);
+                                        const ph  = interpolate(ppm, d.ppm, d.ph);
+                                        setElValue(ppmEl, ppm);
+                                        setElValue(phEl, ph);
+                                        validateInputEl(ppmEl, ppm, d.ppm);
+                                        validateInputEl(rmvEl, v, d.rmv);
+                                        validateInputEl(phEl, ph, d.ph);
+                                }
+                                function fromPH() {
+                                        const v = parseFloat(phEl.value);
+                                        if (isNaN(v)) return;
+                                        const ppm = reverseInterpolate(v, d.ppm, d.ph);
+                                        const rmv = interpolate(ppm, d.ppm, d.rmv);
+                                        setElValue(ppmEl, ppm);
+                                        setElValue(rmvEl, rmv);
+                                        validateInputEl(ppmEl, ppm, d.ppm);
+                                        validateInputEl(rmvEl, rmv, d.rmv);
+                                        validateInputEl(phEl, v, d.ph);
+                                }
+
+                                // init
+                                ppmEl.value = d.ppm[0];
+                                fromPPM();
+
+                                // listeners
+                                ppmEl.addEventListener('input', fromPPM);
+                                rmvEl.addEventListener('input', fromRMV);
+                                phEl.addEventListener('input', fromPH);
+                                return;
+                        }
+
+                        // rmv <-> ph only
+                        if (rmvEl && phEl && !ppmEl && !mvEl) {
+                                const d = DATA.rmv_ph;
+                                function fromRMV() {
+                                        const v = parseFloat(rmvEl.value);
+                                        if (isNaN(v)) return;
+                                        const ph = interpolate(v, d.rmv, d.ph);
+                                        setElValue(phEl, ph);
+                                        validateInputEl(rmvEl, v, d.rmv);
+                                        validateInputEl(phEl, ph, d.ph);
+                                }
+                                function fromPH() {
+                                        const v = parseFloat(phEl.value);
+                                        if (isNaN(v)) return;
+                                        const rmv = reverseInterpolate(v, d.rmv, d.ph);
+                                        setElValue(rmvEl, rmv);
+                                        validateInputEl(rmvEl, rmv, d.rmv);
+                                        validateInputEl(phEl, v, d.ph);
+                                }
+                                rmvEl.value = d.rmv[0];
+                                fromRMV();
+                                rmvEl.addEventListener('input', fromRMV);
+                                phEl.addEventListener('input', fromPH);
+                                return;
+                        }
+
+                        // ppm <-> rmv <-> mv
+                        if (ppmEl && rmvEl && mvEl) {
+                                const d = DATA.ppm_rmv_mv;
+                                function fromPPM() {
+                                        const v = parseFloat(ppmEl.value);
+                                        if (isNaN(v)) return;
+                                        const rmv = interpolate(v, d.ppm, d.rmv);
+                                        const mv  = interpolate(v, d.ppm, d.mv);
+                                        setElValue(rmvEl, rmv);
+                                        setElValue(mvEl, mv);
+                                        validateInputEl(ppmEl, v, d.ppm);
+                                        validateInputEl(rmvEl, rmv, d.rmv);
+                                        validateInputEl(mvEl, mv, d.mv);
+                                }
+                                function fromRMV() {
+                                        const v = parseFloat(rmvEl.value);
+                                        if (isNaN(v)) return;
+                                        const ppm = reverseInterpolate(v, d.ppm, d.rmv);
+                                        const mv  = interpolate(ppm, d.ppm, d.mv);
+                                        setElValue(ppmEl, ppm);
+                                        setElValue(mvEl, mv);
+                                        validateInputEl(ppmEl, ppm, d.ppm);
+                                        validateInputEl(rmvEl, v, d.rmv);
+                                        validateInputEl(mvEl, mv, d.mv);
+                                }
+                                function fromMV() {
+                                        const v = parseFloat(mvEl.value);
+                                        if (isNaN(v)) return;
+                                        const ppm = reverseInterpolate(v, d.ppm, d.mv);
+                                        const rmv = interpolate(ppm, d.ppm, d.rmv);
+                                        setElValue(ppmEl, ppm);
+                                        setElValue(rmvEl, rmv);
+                                        validateInputEl(ppmEl, ppm, d.ppm);
+                                        validateInputEl(rmvEl, rmv, d.rmv);
+                                        validateInputEl(mvEl, v, d.mv);
+                                }
+
+                                ppmEl.value = d.ppm[0];
+                                fromPPM();
+                                ppmEl.addEventListener('input', fromPPM);
+                                rmvEl.addEventListener('input', fromRMV);
+                                mvEl.addEventListener('input', fromMV);
+                                return;
+                        }
+
+                        // rmv <-> mv only
+                        if (rmvEl && mvEl && !ppmEl) {
+                                const d = DATA.rmv_mv;
+                                function fromRMV() {
+                                        const v = parseFloat(rmvEl.value);
+                                        if (isNaN(v)) return;
+                                        const mv = interpolate(v, d.rmv, d.mv);
+                                        setElValue(mvEl, mv);
+                                        validateInputEl(rmvEl, v, d.rmv);
+                                        validateInputEl(mvEl, mv, d.mv);
+                                }
+                                function fromMV() {
+                                        const v = parseFloat(mvEl.value);
+                                        if (isNaN(v)) return;
+                                        const rmv = reverseInterpolate(v, d.rmv, d.mv);
+                                        setElValue(rmvEl, rmv);
+                                        validateInputEl(rmvEl, rmv, d.rmv);
+                                        validateInputEl(mvEl, v, d.mv);
+                                }
+                                rmvEl.value = d.rmv[0];
+                                fromRMV();
+                                rmvEl.addEventListener('input', fromRMV);
+                                mvEl.addEventListener('input', fromMV);
+                                return;
+                        }
+
+                        // if section didn't match any known calculator, do nothing
+                });
+        })();
+
+        </script>
+
+</body>
+</html>
